@@ -1,20 +1,21 @@
 # MA416_Assignment 5_Project 2
-...................
+
 
 ## Getting Started
 
 *  Git pull/clone or download the zip file.
 *  Change working session to where you downlaoded the files.
-*  Open app.R and run it in R studio.
-*  If there is something wrong, contact anyone in group one.
+*  Open part1_shiny.R and part2_shiny.r and run it in R studio.
+*  If there is something wrong, contact anyone in our group.
 
 ### Prerequisites
 
-You need to intall Rstudio and the package that indicated in our R files.
+You need to intall Rstudio and the packages that indicated in our R files.
 
 ## Demo
 
-[Demo](https://tianyingtina.shinyapps.io/) ← Click this link to go to our website.
+[Part 1 Demo](https://tianyingtina.shinyapps.io/hw5_part1/) ← Click this link to go to our website.
+[Part 2 Demo](https://antheali.shinyapps.io/Assignment5_Project2/) ← Click this link to go to our website.
 
 ## Slides
 
