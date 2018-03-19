@@ -21,16 +21,11 @@ You need to install Rstudio and the packages that indicated in our R files.
 
 ## Slides
 
-[Apprehension_Project__Slide_Group1.pdf](http://bit.ly/2ERLQgN)
+[part1_slides.pdf](https://github.com/AntheaLi/Assignment5_Project2/blob/master/part1_slides.pdf/)
 
 
-[Apprehension_Project__Slide_Group1.rnw](http://bit.ly/2Gv7dSm)
+[part2_slides.pdf]()
 
-## Report
-
-[Report_Apprehension_Project_Group1.pdf](http://bit.ly/2C8pC9n)
-
-[Report_Apprehension_Project_Group1.rnw](http://bit.ly/2CyYEnl)
 
 ## Authors
 
