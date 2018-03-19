@@ -215,7 +215,7 @@ while (i <= year_length){
 
 
 \begin{frame}{Project Description}
-In this project, we explore and visualize the using the Sea Temperature and Air Temperature data sourced from NOAA. Through Tidyverse were able to to read, clean, organize, and come up with a conclusion about the temperature change on a daily basis and on a 30 year scope with statistics tests. 
+In this project, we explored and visualized the using the Sea Temperature and Air Temperature data sourced from NOAA. By employing Tidyverse we were able to read, clean, organize, and come up with a conclusion on how temperature changed on a daily basis and on a 30 year scope with statistics tests. 
 \end{frame}
 
 
@@ -231,8 +231,8 @@ Total_DailyNoon$FullTime <-strptime(with(Total_DailyNoon, paste(YYYY, MM, DD, hh
 
 #visualize the total thirty years data
 ggplot(Total_DailyNoon, aes(x = FullTime)) + 
-  geom_line(aes(y = ATMP), colour="red", size = 0.5) + 
-  geom_line(aes(y = WTMP), colour = "blue", size = 0.5) +
+  geom_line(aes(y = ATMP), colour="red") + 
+  geom_line(aes(y = WTMP), colour = "blue") +
   ylab(label="Temperature") + 
   xlab("Time") +
   labs(title="A time series composed of 30 years of daily Air Temperature
@@ -271,7 +271,7 @@ ggplot(Total_1988VS2017_DailyNoon, aes(x = FullTime)) +
                       breaks = c("1998 AirTemp", "2017 AirTemp"),
                       values = c("red", "blue"))+
   xlab("Time") +
-  scale_y_continuous("Temperature", limits = c(0,10)) + 
+  scale_y_continuous("Temperature", limits = c(0,12)) + 
   labs(title="A time series composed of 1998 and 2017 of daily Air Temperature recorded at noon")
 @
 \end{figure}
@@ -288,8 +288,8 @@ ggplot(Total_1988VS2017_DailyNoon, aes(x = FullTime)) +
                       breaks = c("1998 SeaTemp", "2017 SeaTemp"),
                       values = c("red", "blue"))+
   xlab("Time") +
-  scale_y_continuous("Temperature", limits = c(0,10)) + 
-  labs(title="A time series composed of 1998 and 2017 of daily Sea Temperature readings recorded at noon")
+  scale_y_continuous("Temperature", limits = c(-1,12)) + 
+  labs(title="A time series composed of 1998 and 2017 of daily Sea Temperature recorded at noon")
 @
 \end{figure}
 \end{frame}
@@ -307,10 +307,12 @@ colnames(annualTemprature) <- c("Year", "Air Temperature", "Water Temperature")
 @
 
 <<fig=TRUE, echo=FALSE, cache=FALSE,width = 8, height=5>>=
-
 ggplot(annualTemprature, aes(x = Year)) + 
-  geom_line(aes(y = annualMeans_AT), colour="blue", size = 0.5) + 
-  geom_line(aes(y = annualMeans_WT), colour = "red", size = 0.5) +
+  geom_line(aes(y = annualMeans_AT), colour="blue") + 
+  geom_line(aes(y = annualMeans_WT), colour = "red") +
+  scale_colour_manual("", 
+                      breaks = c("Sea Annual Temp", "Air Annual Temp"),
+                      values = c("red", "blue"))+
   ylab(label="Temperature") + 
   xlab("Time") +
   labs(title="Annual Temperature Mean")
