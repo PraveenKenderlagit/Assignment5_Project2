@@ -10,110 +10,134 @@ library(tidyverse)
 library(readxl)
 library(stringr)
 library(ggplot2)
-veg.1 <- read_xlsx("veg1.xlsx")
+veg_1 <- read_xlsx("veg1.xlsx")
 
-cnames.1 <- colnames(veg.1)
+colnames_1 <- colnames(veg_1)
 
 ## try
-n_distinct(veg.1[,1])
-
-n_distinct(veg.1[,2])
-
-#unique(veg.1[,2])
+n_distinct(veg_1[,1])
+#1
+n_distinct(veg_1[,2])
+#13
+unique(veg_1[,2])
+# # A tibble: 13 x 1
+# Year
+# <dbl>
+#   1  2016
+# 2  2015
+# 3  2014
+# 4  2010
+# 5  2006
+# 6  2004
+# 7  2002
+# 8  2000
+# 9  1998
+# 10  1996
+# 11  1994
+# 12  1992
+# 13  1990
 
 ## now get the count for each column
 
-c <- apply(veg.1, 2, n_distinct)
+c <- apply(veg_1, 2, n_distinct)
 #c
-
+# Program             Year           Period      Week Ending        Geo Level            State       State ANSI 
+# 1               13                1                1                2                1                2 
+# Ag District Ag District Code           County      County ANSI         Zip Code           Region   watershed_code 
+# 1                1                1                1                1                6                1 
+# Watershed        Commodity        Data Item           Domain  Domain Category            Value           CV (%) 
+# 1                5               54               13              240             1271                1 
 
 #c[c>1]
 
 
 d <- names(c[c==1])
-#d
-
+# #d
+# [1] "Program"          "Period"           "Week Ending"      "State"            "Ag District"      "Ag District Code"
+# [7] "County"           "County ANSI"      "Zip Code"         "watershed_code"   "Watershed"        "CV (%)"  
 e <- names(c[c>1])
-#e
+# #e
+# [1] "Year"            "Geo Level"       "State ANSI"      "Region"          "Commodity"       "Data Item"      
+# [7] "Domain"          "Domain Category" "Value"         
 
+veg_2 <- select(veg_1, e)
 
-veg.2 <- select(veg.1, e)
+colnames_2 <- colnames(veg_2)
+#colnames_2
 
-cnames.2 <- colnames(veg.2)
-#cnames.2
+apply(veg_2, 2, n_distinct)
 
-apply(veg.2, 2, n_distinct)
+veg_3 <- dplyr::rename(veg_2, 
+                       Geo = "Geo Level", 
+                       State = "State ANSI",
+                       Data = "Data Item",
+                       Category = "Domain Category")
 
-veg.3 <- dplyr::rename(veg.2, 
-                       Geo = `Geo Level`, 
-                       State = `State ANSI`,
-                       Data = `Data Item`,
-                       Category = `Domain Category`)
+colnames_3 <- colnames(veg_3)
+#colnames_3
 
-cnames.3 <- colnames(veg.3)
-#cnames.3
+#veg_3
+#count unique items
+unique(veg_3[,"Commodity"])
 
-#veg.3
+unique(veg_3[,"Data"]) %>% print(n=60)
 
-unique(veg.3[,"Commodity"])
+unique(veg_3[,"Domain"])
 
-unique(veg.3[,"Data"]) %>% print(n=60)
+unique(veg_3[,"Category"])
 
-unique(veg.3[,"Domain"])
+unique(veg_3[,"Value"])
 
-unique(veg.3[,"Category"])
-
-unique(veg.3[,"Value"])
-
-veg_data <- separate(veg.3, Category, into = c("label", "quant"), sep=",")
+vegdata <- separate(veg_3, Category, into = c("label", "quant"), sep=",")
 # 
-n_distinct(veg_data[,2])
+n_distinct(vegdata[,2])
 # 
 # 
-unique(veg_data[,"label"]) %>% print(n=30)
+unique(vegdata[,"label"]) %>% print(n=30)
 
-ru <- filter(veg_data, label=="RESTRICTED USE CHEMICAL")
+RistrictUseChemical_ <- filter(vegdata, label=="RESTRICTED USE CHEMICAL")
 
-ru1 <- ru %>% select(label, quant) %>% unique()
+RistrictUseChemical_1 <- RistrictUseChemical_ %>% select(label, quant) %>% unique()
 
 #get the data for each restricted chemical
 
-ru2 <- ru1 %>% select(-label) %>% 
+RistrictUseChemical_2 <- RistrictUseChemical_1 %>% select(-label) %>% 
   separate(quant, into = c("a", "ID"), sep = "=") %>% 
   separate(a, into = c("D", "Name"), sep = "[()]") %>% 
   select(-D) %>% 
   separate(ID, into = c("ID", "D1"), sep = "[)]") %>% 
   select(-D1)
+#refer to the code on the website
 
-ru1 %>% print(n=30)
+RistrictUseChemical_1 %>% print(n=30)
 
-################################################
-veg_data$quant
 
-veg_data1 <- separate(veg_data, quant, into=c("Treat","Name"), sep = ":")
+#vegdata$quant
 
-veg_data2 <- veg_data1 %>% filter(!Value %in% c("(D)",NA,"(Z)","(NA)"))
+vegdata1 <- separate(vegdata, quant, into=c("Treat","Name"), sep = ":")
 
-veg_data2 <- veg_data2 %>% select(-Domain)
+vegdata2 <- vegdata1 %>% filter(!Value %in% c("(D)",NA,"(Z)","(NA)"))
 
-veg_data2 <- veg_data2 %>% separate(Data, into = c("a", "Measurement"), sep = "-")
+vegdata2 <- vegdata2 %>% select(-Domain)
 
-veg_data2 <- veg_data2 %>% select(-a)
+vegdata2 <- vegdata2 %>% separate(Data, into = c("a", "Measurement"), sep = "-")
 
-veg_data2 <- veg_data2 %>% separate(Measurement, into = c("Measurement", "Unit of Measurement"), sep = ",")
+vegdata2 <- vegdata2 %>% select(-a)
 
-veg_data3 <- veg_data2 %>% separate(Name, into = c("a", "ID"), sep = "=") %>% 
+vegdata2 <- vegdata2 %>% separate(Measurement, into = c("Measurement", "Unit of Measurement"), sep = ",")
+
+vegdata3 <- vegdata2 %>% separate(Name, into = c("a", "ID"), sep = "=") %>% 
   separate(a, into = c("D", "Name"), sep = "[()]") %>% 
   select(-D) %>% 
   separate(ID, into = c("ID", "D1"), sep = "[)]") %>% 
   select(-D1)
 
 #save the data
-write.csv(veg_data3 ,"veg_data3.csv",row.names = FALSE)
+write.csv(vegdata3 ,"vegdatatidy.csv",row.names = FALSE)
 
-write.csv(ru2, "chemical.csv",row.names=F)
+write.csv(RistrictUseChemical_2, "RestrictUseChemical.csv",row.names=F)
 
-veg_data3$Value <- as.numeric(veg_data3$Value)
+vegdata3$Value <- as.numeric(vegdata3$Value)
 
 #get the data with toxicity info in it
 chemical_tox <- read.csv("chemical_tox.csv")
@@ -129,7 +153,7 @@ chemical_tox$ID <- as.character(chemical_tox$ID)
 chemical_tox <- chemical_tox %>% select(-ID)
 
 #brocoli
-broc <- veg_data3 %>% filter(label == "RESTRICTED USE CHEMICAL", Commodity == "BROCCOLI", `Unit of Measurement`==" MEASURED IN LB")
+broc <- vegdata3 %>% filter(label == "RESTRICTED USE CHEMICAL", Commodity == "BROCCOLI", `Unit of Measurement`==" MEASURED IN LB")
 
 broc$Value <- as.numeric(broc$Value)
 
@@ -149,7 +173,7 @@ brocplot <- ggplot(broc, aes(x= Name, y=value )) +
 
 #Cauliflower
 
-Caul <- veg_data3 %>% filter(label == "RESTRICTED USE CHEMICAL", Commodity == "CAULIFLOWER", `Unit of Measurement`==" MEASURED IN LB")
+Caul <- vegdata3 %>% filter(label == "RESTRICTED USE CHEMICAL", Commodity == "CAULIFLOWER", `Unit of Measurement`==" MEASURED IN LB")
 
 Caul$Value <- as.numeric(Caul$Value)
 

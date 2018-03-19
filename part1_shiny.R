@@ -10,7 +10,7 @@ ui <- dashboardPage(
                   dropdownMenu(type = "messages",
                messageItem(
                  from = "Support",
-                 message = "Welcome to our shiny app!",
+                 message = "Welcome to our part 1 shiny app!",
                  icon = icon("life-ring")
                ),
                messageItem(
@@ -29,7 +29,8 @@ ui <- dashboardPage(
     
     sliderInput("years", "Year Range:", 1988, 2017, c(1995,2010)),
     sidebarMenu(
-      menuItem("Raw data", tabName = "rawdata")
+      menuItem("Plots", tabName = "plot"),
+      menuItem("Data Download", tabName = "rawdata")
     ),
 
     hr(),
@@ -37,6 +38,8 @@ ui <- dashboardPage(
   ),
   
   dashboardBody(
+    tabItems(
+      tabItem("plot",
     # Boxes need to be put in a row (or column)
     fluidRow(
       box(title = "Plot",status = "success", solidHeader = TRUE,
@@ -50,8 +53,8 @@ ui <- dashboardPage(
           width = 10,
           verbatimTextOutput("summary")
           )
-      ),
-    tabItems(
+      )),
+    
     tabItem("rawdata",
             verbatimTextOutput("rawtable"),
             downloadButton("downloadCsv", "Download as CSV")
@@ -72,7 +75,13 @@ server <- function(input, output) {
     dataset <- annualTemprature
     dataset
   })
-  
+  output$downloadCsv <- downloadHandler(
+    filename = "AnnualTemprature.csv",
+    content = function(file) {
+      write.csv(annualTemprature, file)
+    },
+    contentType = "text/csv"
+  )
   output$plot1 <- renderPlot({
     dataset <- annualTemprature
     rownames(dataset) <- dataset[,1]

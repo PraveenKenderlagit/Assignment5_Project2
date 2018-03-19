@@ -9,7 +9,7 @@ ui <- dashboardPage(
                   dropdownMenu(type = "messages",
                                messageItem(
                                  from = "Support",
-                                 message = "Welcome to our shiny app!",
+                                 message = "Welcome to our part 2 shiny app!",
                                  icon = icon("life-ring")
                                ),
                                messageItem(
@@ -50,6 +50,7 @@ ui <- dashboardPage(
     )),
 
       tabItem("rawdata",
+              verbatimTextOutput("rawvegdata"),
               downloadButton("downloadCsv", "Download as CSV")
       ))
     
@@ -60,10 +61,17 @@ ui <- dashboardPage(
 
 server <- function(input, output) {
   # Generate a summary of the dataset 
-  output$rawtable <- renderPrint({
-    dataset <- annualTemprature
+  output$rawvegdata <- renderPrint({
+    dataset <- vegdata3
     dataset
   })
+  output$downloadCsv <- downloadHandler(
+    filename = "vegdata.csv",
+    content = function(file) {
+      write.csv(vegdata3, file)
+    },
+    contentType = "text/csv"
+  )
   
   output$plotcaul <- renderPlot({
     caulplot
