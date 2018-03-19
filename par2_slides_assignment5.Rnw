@@ -1,0 +1,309 @@
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+\documentclass{beamer}
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\title{Presentation Title}
+
+\author{F.~Author\inst{1} \and S.~Another\inst{2}}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[Universities of Somewhere and Elsewhere] % (optional, but mostly needed)
+{
+  \inst{1}%
+  Department of Computer Science\\
+  University of Somewhere
+  \and
+  \inst{2}%
+  Department of Theoretical Philosophy\\
+  University of Elsewhere}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date{March 18, 2018}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online
+
+\subject{Theoretical Computer Science}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+
+<<echo=FALSE>>=
+  options(width=160)
+  library(knitr)
+
+  listing <- function(x, options) {
+    paste("\\begin{lstlisting}[basicstyle=\\ttfamily,breaklines=true]\n",
+      x, "\\end{lstlisting}\n", sep = "")
+  }
+  knit_hooks$set(source=listing, output=listing)
+@
+
+\title{Assignment 5 Part 2}
+\author{Tianying Zhang \and Shenhao Li\and Anthea Yichen Li}
+\institute{MA 415}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+<<setup, echo=FALSE, cache=FALSE>>=
+options(width=60)
+@
+
+<<setupcode,echo=FALSE, cache=FALSE,include=FALSE,results=hide>>=
+####################################################################################################################################
+
+library(tidyverse)
+library(readxl)
+library(stringr)
+library(ggplot2)
+veg.1 <- read_xlsx("veg1.xlsx")
+
+cnames.1 <- colnames(veg.1)
+
+## try
+n_distinct(veg.1[,1])
+
+n_distinct(veg.1[,2])
+
+#unique(veg.1[,2])
+
+## now get the count for each column
+
+c <- apply(veg.1, 2, n_distinct)
+#c
+
+
+#c[c>1]
+
+
+d <- names(c[c==1])
+#d
+
+e <- names(c[c>1])
+#e
+
+
+veg.2 <- select(veg.1, e)
+
+cnames.2 <- colnames(veg.2)
+#cnames.2
+
+apply(veg.2, 2, n_distinct)
+
+veg.3 <- dplyr::rename(veg.2, 
+                       Geo = `Geo Level`, 
+                       State = `State ANSI`,
+                       Data = `Data Item`,
+                       Category = `Domain Category`)
+
+cnames.3 <- colnames(veg.3)
+#cnames.3
+
+#veg.3
+
+unique(veg.3[,"Commodity"])
+
+unique(veg.3[,"Data"]) %>% print(n=60)
+
+unique(veg.3[,"Domain"])
+
+unique(veg.3[,"Category"])
+
+unique(veg.3[,"Value"])
+
+veg_data <- separate(veg.3, Category, into = c("label", "quant"), sep=",")
+# 
+n_distinct(veg_data[,2])
+# 
+# 
+unique(veg_data[,"label"]) %>% print(n=30)
+
+ru <- filter(veg_data, label=="RESTRICTED USE CHEMICAL")
+
+ru1 <- ru %>% select(label, quant) %>% unique()
+
+#get the data for each restricted chemical
+
+ru2 <- ru1 %>% select(-label) %>% 
+  separate(quant, into = c("a", "ID"), sep = "=") %>% 
+  separate(a, into = c("D", "Name"), sep = "[()]") %>% 
+  select(-D) %>% 
+  separate(ID, into = c("ID", "D1"), sep = "[)]") %>% 
+  select(-D1)
+
+ru1 %>% print(n=30)
+
+################################################
+veg_data$quant
+
+veg_data1 <- separate(veg_data, quant, into=c("Treat","Name"), sep = ":")
+
+veg_data2 <- veg_data1 %>% filter(!Value %in% c("(D)",NA,"(Z)","(NA)"))
+
+veg_data2 <- veg_data2 %>% select(-Domain)
+
+veg_data2 <- veg_data2 %>% separate(Data, into = c("a", "Measurement"), sep = "-")
+
+veg_data2 <- veg_data2 %>% select(-a)
+
+veg_data2 <- veg_data2 %>% separate(Measurement, into = c("Measurement", "Unit of Measurement"), sep = ",")
+
+veg_data3 <- veg_data2 %>% separate(Name, into = c("a", "ID"), sep = "=") %>% 
+  separate(a, into = c("D", "Name"), sep = "[()]") %>% 
+  select(-D) %>% 
+  separate(ID, into = c("ID", "D1"), sep = "[)]") %>% 
+  select(-D1)
+
+#save the data
+write.csv(veg_data3 ,"veg_data3.csv",row.names = FALSE)
+
+write.csv(ru2, "chemical.csv",row.names=F)
+
+veg_data3$Value <- as.numeric(veg_data3$Value)
+
+#get the data with toxicity info in it
+chemical_tox <- read.csv("chemical_tox.csv")
+
+chemical_tox <- as.tibble(chemical_tox)
+
+chemical_tox$X <- as.integer(chemical_tox$X)
+
+chemical_tox$Name <- as.character(chemical_tox$Name)
+
+chemical_tox$ID <- as.character(chemical_tox$ID)
+
+chemical_tox <- chemical_tox %>% select(-ID)
+@
+
+\frame{\titlepage}
+
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+\section{Project Description}
+\section{Data Visualization}
+\subsection{LD50(mg/kg) and Real content(lb) of Brocoli}
+\subsection{LD50(mg/kg) and Real content(lb) of Cauliflower}
+\subsection{Conclusion}
+
+\begin{frame}{Project Description}
+text goes here 
+\end{frame}
+
+\begin{frame}[fragile]{Data Visualization}{LD50(mg/kg) and Real content(lb) of Brocoli}
+\begin{figure}
+<<fig=TRUE, echo=FALSE, cache=FALSE,width = 8, height=5>>=
+#change data to correct format
+#brocoli
+broc <- veg_data3 %>% filter(label == "RESTRICTED USE CHEMICAL", Commodity == "BROCCOLI", `Unit of Measurement`==" MEASURED IN LB")
+
+broc$Value <- as.numeric(broc$Value)
+
+broc <- left_join(broc,chemical_tox,by="Name")
+
+broc <- rename(broc,Real=Value,LD50=X)
+
+broc <- broc %>% gather(Real , LD50 , key="Toxicity", value="value")
+
+brocplot <- ggplot(broc, aes(x= Name, y=value )) + 
+  geom_bar(stat="identity",position = "dodge",aes(fill=Toxicity)) + 
+  labs(y = "Values(LB) ",x = "Chemical Name") +
+  coord_flip()+
+  labs(title="LD50(mg/kg) and Real content(lb) of Brocoli")
+brocplot
+@
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Data Visualization}{LD50(mg/kg) and Real content(lb) of Cauliflower}
+\begin{figure}
+<<fig=TRUE, echo=FALSE, cache=FALSE,width = 8, height=5>>=
+#Cauliflower
+
+Caul <- veg_data3 %>% filter(label == "RESTRICTED USE CHEMICAL", Commodity == "CAULIFLOWER", `Unit of Measurement`==" MEASURED IN LB")
+
+Caul$Value <- as.numeric(Caul$Value)
+
+Caul <- left_join(Caul,chemical_tox,by="Name")
+
+Caul <- rename(Caul,Real=Value,LD50=X)
+
+Caul <- Caul %>% gather(Real , LD50 , key="Toxicity", value="value")
+
+#plot the Cauliflower 
+caulplot <- ggplot(Caul, aes(x= Name, y=value )) + 
+  geom_bar(stat="identity",position = "dodge",aes(fill=Toxicity)) + 
+  labs(y = "Values(LB) ",x = "Chemical Name") +
+  coord_flip()+
+  labs(title="LD50(mg/kg) and Real content(lb) of Cauliflower")
+caulplot
+@
+\end{figure}
+\end{frame}
+
+\begin{frame}{text goes here}{Conclusion}
+\begin{itemize}
+\item{
+text text text
+}
+\end{itemize}
+\end{frame}
+
+\end{document}
