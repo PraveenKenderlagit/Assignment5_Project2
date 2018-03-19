@@ -10,7 +10,7 @@
 
 ### Prerequisites
 
-You need to intall Rstudio and the packages that indicated in our R files.
+You need to install Rstudio and the packages that indicated in our R files.
 
 ## Demo
 
