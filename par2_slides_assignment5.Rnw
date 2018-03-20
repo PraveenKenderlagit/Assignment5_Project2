@@ -239,15 +239,16 @@ chemical_tox <- chemical_tox %>% select(-ID)
 
 \section{Project Description}
 \section{Data Visualization}
-\subsection{LD50(mg/kg) and Real content(lb) of Brocoli}
-\subsection{LD50(mg/kg) and Real content(lb) of Cauliflower}
+\subsection{LD50(mg/lb) and Real content(lb) of Brocoli}
+\subsection{Conclusion}
+\subsection{LD50(mg/lb) and Real content(lb) of Cauliflower}
 \subsection{Conclusion}
 
 \begin{frame}{Project Description}
-text goes here 
+This project is designed to analyze the amount of restricted use chemicals contained in the vegetables, specifically broccoli and cauliflower. After clean, organize, visualize and analyze the raw data from United States Department of Agriculture and United States Environmental Protection Agency, we got the following graphics and conclusions.
 \end{frame}
 
-\begin{frame}[fragile]{Data Visualization}{LD50(mg/kg) and Real content(lb) of Brocoli}
+\begin{frame}[fragile]{Data Visualization}{LD50(mg/kg) and Real content(lb) of Broccoli}
 \begin{figure}
 <<fig=TRUE, echo=FALSE, cache=FALSE,width = 8, height=5>>=
 #change data to correct format
@@ -270,6 +271,14 @@ brocplot <- ggplot(broc, aes(x= Name, y=value )) +
 brocplot
 @
 \end{figure}
+\end{frame}
+
+\begin{frame}{text goes here}{Conclusion}
+\begin{itemize}
+\item{
+The graphic shows that almost all the restricted use chemicals contained in broccoli exceed the amount of Lethal dose (LD50) in experiments except the chemical PRONAMIDE.
+}
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Data Visualization}{LD50(mg/kg) and Real content(lb) of Cauliflower}
@@ -301,7 +310,7 @@ caulplot
 \begin{frame}{text goes here}{Conclusion}
 \begin{itemize}
 \item{
-text text text
+The graphic shows that almost all the restricted use chemicals contained in broccoli exceed the amount of Lethal dose (LD50) in experiments except the chemical BETACYFLUTHRIN.
 }
 \end{itemize}
 \end{frame}
