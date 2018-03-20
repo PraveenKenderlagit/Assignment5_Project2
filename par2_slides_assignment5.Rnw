@@ -273,7 +273,7 @@ brocplot
 \end{figure}
 \end{frame}
 
-\begin{frame}{text goes here}{Conclusion}
+\begin{frame}{Data Visualization}{Conclusion}
 \begin{itemize}
 \item{
 The graphic shows that almost all the restricted use chemicals contained in broccoli exceed the amount of Lethal dose (LD50) in experiments except the chemical PRONAMIDE.
@@ -307,7 +307,7 @@ caulplot
 \end{figure}
 \end{frame}
 
-\begin{frame}{text goes here}{Conclusion}
+\begin{frame}{Data Visualization}{Conclusion}
 \begin{itemize}
 \item{
 The graphic shows that almost all the restricted use chemicals contained in broccoli exceed the amount of Lethal dose (LD50) in experiments except the chemical BETACYFLUTHRIN.
