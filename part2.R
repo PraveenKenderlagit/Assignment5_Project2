@@ -167,7 +167,7 @@ brocplot <- ggplot(broc, aes(x= Name, y=value )) +
   geom_bar(stat="identity",position = "dodge",aes(fill=Toxicity)) + 
   labs(y = "Values(LB) ",x = "Chemical Name") +
   coord_flip()+
-  labs(title="LD50(mg/kg) and Real content(lb) of Brocoli")
+  labs(title="LD50(mg/lb) and Real content(lb) of Brocoli")
 
 
 
@@ -188,5 +188,5 @@ caulplot <- ggplot(Caul, aes(x= Name, y=value )) +
   geom_bar(stat="identity",position = "dodge",aes(fill=Toxicity)) + 
   labs(y = "Values(LB) ",x = "Chemical Name") +
   coord_flip()+
-  labs(title="LD50(mg/kg) and Real content(lb) of Cauliflower")
+  labs(title="LD50(mg/lb) and Real content(lb) of Cauliflower")
 
